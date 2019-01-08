@@ -43,9 +43,8 @@
 series_generator <- function(
 
   data, x, y, lookback = 1, timesteps = 1,
-  start_index = NULL, end_index = NULL,
-  batch_size = 32, return_target = TRUE,
-  prep_funs = NULL
+  start_index, end_index, batch_size = 32,
+  return_target = TRUE, prep_funs = NULL
 
   ) {
   
@@ -55,12 +54,8 @@ series_generator <- function(
     stop("'data' must be an object of 'data.frame' or 'matrix'")
   
   # check start & end index
-  if (is.null(start_index)) start_index <- 1
-  if (is.null(end_index)) end_index <- nrow(data)
-  
-  # set some global params
-  n_col_x <- length(x)
-  n_col_y <- length(y)
+  if (missing(start_index)) start_index <- 1
+  if (missing(end_index)) end_index <- nrow(data)
   
   # start iterator
   i <- start_index
@@ -93,8 +88,8 @@ series_generator <- function(
     y_rows <- c((nrow(batch) - batch_n + 1):nrow(batch))
 
     # create container arrays
-    x_array <- array(0, dim = c(batch_n, timesteps, n_col_x))
-    if (return_target) y_array <- array(0, dim = c(batch_n, n_col_y))
+    x_array <- array(0, dim = c(batch_n, timesteps, length(x)))
+    if (return_target) y_array <- array(0, dim = c(batch_n, length(y)))
     
     # fill the container
     for (j in 1:batch_n) {
@@ -143,7 +138,7 @@ series_generator <- function(
 forecast_generator <- function(
 
   data, x, lookback = 1, timesteps = 1,
-  last_index = NULL, horizon = 1,
+  last_index, horizon = 1,
   batch_size = 1, prep_funs = NULL
 
   ) {
@@ -154,12 +149,9 @@ forecast_generator <- function(
     stop("'data' must be an object of 'data.frame' or 'matrix'")
   
   # sample index
-  if (is.null(last_index)) last_index <- nrow(data)
+  if (missing(last_index)) last_index <- nrow(data)
   end_index <- last_index + horizon - lookback
   start_index <- end_index - horizon + 1
-
-  # set some global params
-  n_col_x <- length(x)
 
   # start iterator
   i <- start_index
@@ -200,7 +192,7 @@ forecast_generator <- function(
     x_rows <- c((nrow(batch) - batch_n + 1):nrow(batch))
 
     # create container array
-    x_array <- array(0, dim = c(batch_n, timesteps, n_col_x))
+    x_array <- array(0, dim = c(batch_n, timesteps, length(x)))
 
     # fill the container
     for (j in 1:length(x_rows)) {

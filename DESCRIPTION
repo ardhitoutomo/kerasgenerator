@@ -1,11 +1,11 @@
 Package: kerasgenerator
 Title: Data Generator for R interface to Keras
-Version: 0.1.2
+Version: 0.1.3
 Authors@R:
   person(
     given = "R. Dimas Bagas",
     family = "Herlambang",
-    role = c("aut", "cre", "cph"),
+    role = c("aut", "cre"),
     email = "bagasbgy@gmail.com"
   )
 Description: Some Keras data generator functions for various deep learning scenario. Designed to make data generation process for fitting a Keras model easier.
