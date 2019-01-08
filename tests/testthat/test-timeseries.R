@@ -32,9 +32,10 @@ val_start <- val_end - val_size + 1
 train_end <- val_start - 1
 train_start <- train_end - train_size + 1
 
-# number of steps to see full data
+# batch size
 batch_size <- 20
 
+# number of steps to see full data
 train_steps <- ceiling(train_size / batch_size)
 val_steps <- ceiling(val_size / batch_size)
 

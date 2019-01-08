@@ -5,6 +5,7 @@ output: github_document
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 ```{r setup, include = FALSE}
+
 knitr::opts_chunk$set(
   warning = FALSE,
   message = FALSE,
@@ -12,11 +13,14 @@ knitr::opts_chunk$set(
   fig.align = "center",
   out.width = "100%"
 )
+
 ```
 
 # kerasgenerator <img src="man/figures/logo.svg" align="right" height=140/>
 
 `kerasgenerator` package is shipped with some data generator functions, which are designed to make the data generation process for [`keras`](https://keras.rstudio.com) models easier.
+
+# Getting Started
 
 ## Installation
 
