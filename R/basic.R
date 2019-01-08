@@ -1,71 +1,123 @@
-# basic data generator
-data_generator <- function(
+# data generators
+#-------------------------------------------------------------------------------
 
-  data, x, y, index, start_index, end_index,
-  shuffle = TRUE, batch_size = 32,
-  return_target = TRUE, prep_funs = NULL
+# data generator generic
+data_generator <- function(data, ...) UseMethod("data_generator")
+
+# data generator for data frame
+data_generator.data.frame <- function(
+
+  data, x, y, batch_size = 32, shuffle = TRUE,
+  output = "all", ...
 
   ) {
-  
-  # stop if data is not a proper object
-  if (!inherits(data, c("data.frame", "matrix")))
-  
-    stop("'data' must be an object of 'data.frame' or 'matrix'")
-  
-  # handle index arguments
-  if (!missing(index)) {
     
-    # stop if also specifying start and end index
-    if (!missing(start_index) | !missing(end_index))
-      
-      stop("choose either give specific index, or start and end index")
-    
-    # subset data based on index
-    data <- data[index, ]
-    
-  }
+  # input args
+  input_args <- list(...)
+
+  # handle data input
+  data <- handle_data_input(data, input_args)
   
-  # check start & end index
-  if (missing(start_index)) start_index <- 1
-  if (missing(end_index)) end_index <- nrow(data)
+  # generator args
+  args <- list(
+    data = data,
+    x = x,
+    y = y,
+    batch_size = batch_size,
+    shuffle = shuffle,
+    output = output
+  )
+  
+  # set class
+  class(args) <- "data_generator"
+  
+  # build the generator
+  build_generator(args)
+  
+}
+
+# data generator default
+data_generator.default <- function(data, ...) {
+  
+  stop("'data' must be an object of 'data.frame' or 'matrix'")
+  
+}
+
+# data generator input handler
+#-------------------------------------------------------------------------------
+
+# input handler generic
+handle_data_input <- function(data, ...) UseMethod("handle_data_input")
+
+# input handler for data frame
+handle_data_input.data.frame <- function(data, input_args) {
+  
+  # handle the inputs
+  if (!is.null(input_args$index)) data <- data[input_args$index, ]
+  if (!is.null(input_args$prep_funs)) data <- input_args$prep_funs(data)
+  
+  # convert to matrix
+  data <- data.matrix(data)
+  
+  # strip row names
+  rownames(data) <- NULL
+  
+  # processed data
+  return(data)
+  
+}
+
+# data generators builders
+#-------------------------------------------------------------------------------
+
+#
+build_generator <- function(args) UseMethod("build_generator")
+
+#
+build_generator.data_generator <- function(args) {
+  
+  # get all args
+  data <- args$data
+  x <- args$x
+  y <- args$y
+  batch_size <- args$batch_size
+  shuffle <- args$shuffle
+  output <- args$output
   
   # start iterator
-  i <- start_index
-  i_nth <- 1
-
-  # return an iterator
-  function() {
-    
+  i <- 1
+  
+  # return specified generator
+  generator <- function() {
+  
     # reset iterator if already seen all data
-    if ((i + batch_size - 1) > end_index) i <<- start_index
+    if ((i + batch_size - 1) > nrow(data)) i <<- 1
 
     # iterate current batch's rows
-    if (shuffle) rows <- sample(c(i:min(i + batch_size - 1, end_index)))
-    else rows <- c(i:min(i + batch_size - 1, end_index))
+    if (shuffle) rows <- sample(c(i:min(i + batch_size - 1, nrow(data))))
+    else rows <- c(i:min(i + batch_size - 1, nrow(data)))
     
     # update to next iteration
     i <<- i + batch_size
-    i_nth <<- i_nth + 1
 
     # get current batch
     batch <- data[rows, ]
     
-    # preprocess the batch
-    if (!is.null(prep_funs)) batch <- prep_funs(batch)
-    if (inherits(batch, "data.frame")) batch <- data.matrix(batch)
-
-    # create container arrays
-    x_array <- array(0, dim = c(nrow(batch), length(x)))
-    if (return_target) y_array <- array(0, dim = c(nrow(batch), length(y)))
-    
     # split to x and y arrays
-    x_array[, ] <- batch[, x]
-    if (return_target) y_array[, ] <- batch[, y]
+    if (output %in% c("x", "all")) x_array <- batch[, x]
+    if (output %in% c("y", "all")) y_array <- batch[, y]
     
     # return the batch
-    if (!return_target) list(x_array)
-    else list(x_array, y_array)
+    if (output == "x") list(x_array)
+    else if (output == "y") list(y_array)
+    else if (output == "all") list(x_array, y_array)
 
   }
+  
+  # set generator class
+  class(generator) <- c("data_generator", class(generator))
+  
+  # return the generator
+  return(generator)
 
 }
