@@ -15,7 +15,7 @@ glimpse.keras_generator <- function(x, ...) {
 
 #' @export
 
-glimpse.cross_section <- function(x, ...) {
+glimpse.xsection_generator <- function(x, ...) {
   
   cat("Batch", .enclose(x$partition, x$steps_to_all), "preview:", "\n")
   

@@ -4,24 +4,14 @@ build_generator <- function(x) UseMethod("build_generator")
 
 #' @export
 
-build_generator.cross_section <- function(x) {
+build_generator.xsection_generator <- function(x) {
 
-  list2env(build_generator_meta(x), environment())
+  list2env(.build_generator_env(x), environment())
   
   rm(x)
 
-  function(...) {
+  x <- function() {
     
-    opts <- list(...)
-
-    if (!is.null(opts$to)) {
-
-      partition <<- opts$to
-
-      return(paste("reset the generator to batch:", opts$to))
-
-    }
-
     if (shuffle) {
 
       set.seed(seed)
@@ -33,16 +23,18 @@ build_generator.cross_section <- function(x) {
       rows <- c(i[partition]:j[partition])
 
     }
+    
+    n <- length(rows)
 
     batch <- data[rows, ]
 
-    if (!is.null(rec)) batch <- bake(rec, batch)
+    if (exists("rec")) batch <- bake(rec, batch)
 
     if (output %in% c("x", "all")) {
 
       batch_x <- select(batch, !!!x_select)
 
-      x_array <- array(0, c(nrow(batch_x), ncol(batch_x)))
+      x_array <- array(0, c(n, x_length))
 
       x_array[, ] <- data.matrix(batch_x)
 
@@ -52,12 +44,12 @@ build_generator.cross_section <- function(x) {
 
       batch_y <- select(batch, !!!y_select)
 
-      y_array <- array(0, c(nrow(batch_y), ncol(batch_y)))
+      y_array <- array(0, c(n, y_length))
 
       y_array[, ] <- data.matrix(batch_y)
 
     }
-
+    
     if (partition + 1 > steps_to_all) partition <<- 1
 
     else partition <<- partition + 1
@@ -69,36 +61,49 @@ build_generator.cross_section <- function(x) {
     else list(x_array, y_array)
 
   }
+  
+  class(x) <- c("xsection_generator", "function")
+  
+  x
 
 }
 
 #' @export
 
-build_generator_meta <- function(x) UseMethod("build_generator_meta")
+.build_generator_env <- function(x) UseMethod(".build_generator_env")
 
 #' @export
 
-build_generator_meta.cross_section <- function(x) {
+.build_generator_env.xsection_generator <- function(x) {
 
   if (is.null(x$x_select) & is.null(x$y_select))
 
     stop("select either x or y first")
+
+  if (!is.null(x$x_select)) {
+
+    x$x_names <- colnames(x$preview$x)
+    
+    x$x_length <- length(x$x_names)
+    
+  }
+    
+  if (!is.null(x$y_select)) {
+
+    x$y_names <- colnames(x$preview$y)
+    
+    x$y_length <- length(x$y_names)
+    
+  }
+  
+  x$preview <- NULL
 
   if (is.null(x$x_select)) x$output <- "y"
 
   else if (is.null(x$y_select)) x$output <- "x"
 
   else x$output <- "all"
-
-  x$x_names <- colnames(x$preview$x)
-
-  x$y_names <- colnames(x$preview$y)
-
+    
   x
 
 }
-
-# # update generator meta
-# fname <- deparse(sys.call()[[1]])
-# parent <- parent.frame()
-# attr(parent[[fname]], "batch_nth") <- batch_nth

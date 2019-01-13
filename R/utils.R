@@ -1,10 +1,7 @@
 #' @export
 
-# reset generator
-reset_generator <- function(generator, to, n) {
+reset_generator <- function(gen, to = 1) {
   
-  # force reset
-  if (!missing(to)) generator(to = to)
-  if (!missing(n)) generator(n = n)
+  assign("partition", to, envir = environment(gen))
   
 }

@@ -1,11 +1,19 @@
 #' @export
 
-.enclose <- function(..., sep = "/", enclose = "[") {
+.enclose <- function(..., sep = "/", enc = "[") {
   
   strings <- c(...)
   
-  if (enclose == "[")
+  if (enc == "[")
   
     paste0("[", paste0(strings, collapse = sep), "]")
+  
+  if (enc == "(")
+  
+    paste0("(", paste0(strings, collapse = sep), ")")
+  
+  if (enc == "<")
+  
+    paste0("<", paste0(strings, collapse = sep), ">")
   
 }
