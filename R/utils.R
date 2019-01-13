@@ -1,12 +1,10 @@
-# generator modifyer
-#-------------------------------------------------------------------------------
-
 #' @export
 
 # reset generator
-reset_generator <- function(generator) {
+reset_generator <- function(generator, to, n) {
   
-  # reset the generator
-  generator(reset = TRUE)
+  # force reset
+  if (!missing(to)) generator(to = to)
+  if (!missing(n)) generator(n = n)
   
 }

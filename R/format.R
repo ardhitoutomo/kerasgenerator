@@ -1,62 +1,62 @@
 #' @export
 
-glimpse.data_generator <- function(x, ...) {
+glimpse.keras_generator <- function(x, ...) {
   
-  # get sample batch
-  batch <- x()
-
-  # reset the generator
-  reset_generator(x)
-
-  # cat header
-  cat("# A data generator with:", length(batch), "arrays\n")
+  cat("A keras generator with:", "\n")
+    
+  cat("- Number of arrays:", sum(!is.null(x$x), !is.null(x$y)), "\n")
+  cat("- Steps to see all data:", x$steps_to_all, "steps", "\n")
   
-  # glimpse example batch
-  glimpse(batch)
-
+  cat("\n")
+    
+  NextMethod()
+  
 }
 
 #' @export
 
-glimpse.kerasgenerator_batch <- function(x, ...) {
-
-  # batch order
-  batch_order <- paste0(
-    "[", attr(x, "batch_nth"), "/", attr(x, "steps_to_all"), "]"
-  )
+glimpse.cross_section <- function(x, ...) {
   
-  # cat header
-  cat("# Batch", batch_order, "\n")
-
-  # cat array glimpses
-  if (!is.null(x$x_array)) {
+  cat("Batch", .enclose(x$partition, x$steps_to_all), "preview:", "\n")
   
-    # get array dim
-    x_dim <- paste0("[", paste(dim(x$x_array), collapse = ", "), "]")
-  
-    # convert to tibble
-    x_array <- as_tibble(x$x_array)
-    colnames(x_array) <- attr(x, "x_names")
+  cat("\n")
     
-    # glimpse header
-    cat("\n# X array", x_dim, "\n")
-    glimpse(x_array)
+  glimpse(x$preview$data)
+  
+  if (!is.null(x$preview$x)) {
+    
+    cat("\n")
+    
+    x_dim <- .enclose(nrow(x$preview$x), ncol(x$preview$x), sep = ", ")
+    
+    cat("X array with", x_dim, "dimension", "\n")
+    
+    cat("\n")
+    
+    glimpse(x$preview$x)
     
   }
   
-  if (!is.null(x$y_array)) {
-  
-    # get array dim
-    y_dim <- paste0("[", paste(dim(x$y_array), collapse = ", "), "]")
-
-    # convert to tibble
-    y_array <- as_tibble(x$y_array)
-    colnames(y_array) <- attr(x, "y_names")
+  if (!is.null(x$preview$y)) {
     
-    # glimpse header
-    cat("\n# Y array", y_dim, "\n")
-    glimpse(y_array)
+    cat("\n")
+    
+    y_dim <- .enclose(nrow(x$preview$y), ncol(x$preview$y), sep = ", ")
+    
+    cat("Y array with", y_dim, "dimension", "\n")
+    
+    cat("\n")
+    
+    glimpse(x$preview$y)
     
   }
   
 }
+
+#' @export
+
+print.keras_generator <- function(x, ...) glimpse(x)
+
+#' @export
+
+head.keras_generator <- function(x, ...) glimpse(x)

@@ -3,8 +3,26 @@
 \docType{import}
 \name{reexports}
 \alias{reexports}
-\alias{glimpse}
+\alias{\%>\%}
+\alias{\%<>\%}
+\alias{\%T>\%}
+\alias{select}
+\alias{slice}
+\alias{filter}
+\alias{enquos}
+\alias{bake}
 \alias{as_tibble}
+\alias{is_tibble}
+\alias{glimpse}
+\alias{contains}
+\alias{ends_with}
+\alias{everything}
+\alias{matches}
+\alias{num_range}
+\alias{one_of}
+\alias{starts_with}
+\alias{last_col}
+\alias{vars_select}
 \title{Objects exported from other packages}
 \keyword{internal}
 \description{
@@ -12,6 +30,16 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{tibble}{\code{\link[tibble]{glimpse}}, \code{\link[tibble]{as_tibble}}}
+  \item{dplyr}{\code{\link[dplyr]{select}}, \code{\link[dplyr]{slice}}, \code{\link[dplyr]{filter}}}
+
+  \item{magrittr}{\code{\link[magrittr]{\%>\%}}, \code{\link[magrittr]{\%<>\%}}, \code{\link[magrittr]{\%T>\%}}}
+
+  \item{recipes}{\code{\link[recipes]{bake}}}
+
+  \item{rlang}{\code{\link[rlang]{enquos}}}
+
+  \item{tibble}{\code{\link[tibble]{as_tibble}}, \code{\link[tibble]{is_tibble}}, \code{\link[tibble]{glimpse}}}
+
+  \item{tidyselect}{\code{\link[tidyselect]{contains}}, \code{\link[tidyselect]{ends_with}}, \code{\link[tidyselect]{everything}}, \code{\link[tidyselect]{matches}}, \code{\link[tidyselect]{num_range}}, \code{\link[tidyselect]{one_of}}, \code{\link[tidyselect]{starts_with}}, \code{\link[tidyselect]{last_col}}, \code{\link[tidyselect]{vars_select}}}
 }}
 
