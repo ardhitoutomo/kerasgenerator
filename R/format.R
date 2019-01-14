@@ -8,14 +8,14 @@ glimpse.keras_generator <- function(x, ...) {
   cat("- Steps to see all data:", x$steps_to_all, "steps", "\n")
   
   cat("\n")
-    
+  
   NextMethod()
   
 }
 
 #' @export
 
-glimpse.xsection_generator <- function(x, ...) {
+glimpse.data_generator <- function(x, ...) {
   
   cat("Batch", .enclose(x$partition, x$steps_to_all), "preview:", "\n")
   

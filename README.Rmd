@@ -2,8 +2,6 @@
 output: github_document
 ---
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
 ```{r setup, include = FALSE}
 
 knitr::opts_chunk$set(
@@ -35,6 +33,34 @@ if (!require(devtools)) install.packages("devtools")
 devtools::install_github("bagasbgy/kerasgenerator")
 
 ```
+
+## Compatibility
+
+Most of `kerasgenerator` functionalities are using `dplyr` and `recipes` interface to make data preparation process easier. Note that you must import `kerasgenerator` after `keras` library imported to make the package works properly:
+
+```{r}
+
+# import libs
+library(dplyr)
+library(keras)
+library(kerasgenerator)
+library(recipes)
+
+```
+
+## Usage
+
+Let's make a quick example using `iris` dataset. For a simple model that use cross-sectional data, you can start by using `data_generator()` to convert the data into pre-compiled generator:
+
+```{r}
+
+gen <- data_generator(iris, batch_size = 32, shuffle = TRUE)
+
+gen
+
+```
+
+
 
 ## Further Development
 

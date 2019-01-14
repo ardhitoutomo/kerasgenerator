@@ -18,25 +18,35 @@ magrittr::`%T>%`
 
 dplyr::select
 
-#' @importFrom dplyr slice
+#' @importFrom dplyr mutate
 #' @export
 
-dplyr::slice
+dplyr::mutate
 
 #' @importFrom dplyr filter
 #' @export
 
 dplyr::filter
 
-#' @importFrom rlang enquos
+#' @importFrom dplyr slice
 #' @export
 
-rlang::enquos
+dplyr::slice
+
+#' @importFrom dplyr group_by
+#' @export
+
+dplyr::group_by
 
 #' @importFrom recipes bake
 #' @export
 
 recipes::bake
+
+#' @importFrom rlang enquos
+#' @export
+
+rlang::enquos
 
 #' @importFrom tibble as_tibble
 #' @export

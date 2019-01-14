@@ -7,10 +7,12 @@
 \alias{\%<>\%}
 \alias{\%T>\%}
 \alias{select}
-\alias{slice}
+\alias{mutate}
 \alias{filter}
-\alias{enquos}
+\alias{slice}
+\alias{group_by}
 \alias{bake}
+\alias{enquos}
 \alias{as_tibble}
 \alias{is_tibble}
 \alias{glimpse}
@@ -30,7 +32,7 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{dplyr}{\code{\link[dplyr]{select}}, \code{\link[dplyr]{slice}}, \code{\link[dplyr]{filter}}}
+  \item{dplyr}{\code{\link[dplyr]{select}}, \code{\link[dplyr]{mutate}}, \code{\link[dplyr]{filter}}, \code{\link[dplyr]{slice}}, \code{\link[dplyr]{group_by}}}
 
   \item{magrittr}{\code{\link[magrittr]{\%>\%}}, \code{\link[magrittr]{\%<>\%}}, \code{\link[magrittr]{\%T>\%}}}
 

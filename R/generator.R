@@ -1,10 +1,27 @@
 #' @export
 
+data_generator <- function(data, batch_size = 32,
+                           shuffle = TRUE, seed = 1) {
+  
+  data <- .as_generator_input(data)
+
+  x <- as.list(environment())
+  
+  class(x) <- c("keras_generator", "data_generator")
+  
+  x <- .set_meta(x)
+  
+  x
+  
+}
+
+#' @export
+
 build_generator <- function(x) UseMethod("build_generator")
 
 #' @export
 
-build_generator.xsection_generator <- function(x) {
+build_generator.data_generator <- function(x) {
 
   list2env(.build_generator_env(x), environment())
   
@@ -62,7 +79,7 @@ build_generator.xsection_generator <- function(x) {
 
   }
   
-  class(x) <- c("xsection_generator", "function")
+  class(x) <- c("data_generator", "function")
   
   x
 
@@ -74,7 +91,7 @@ build_generator.xsection_generator <- function(x) {
 
 #' @export
 
-.build_generator_env.xsection_generator <- function(x) {
+.build_generator_env.data_generator <- function(x) {
 
   if (is.null(x$x_select) & is.null(x$y_select))
 
@@ -86,6 +103,8 @@ build_generator.xsection_generator <- function(x) {
     
     x$x_length <- length(x$x_names)
     
+    x$input_shape <- x$x_length
+    
   }
     
   if (!is.null(x$y_select)) {
@@ -93,6 +112,8 @@ build_generator.xsection_generator <- function(x) {
     x$y_names <- colnames(x$preview$y)
     
     x$y_length <- length(x$y_names)
+    
+    x$output_shape <- x$y_length
     
   }
   

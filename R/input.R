@@ -4,6 +4,10 @@
 
 #' @export
 
+.as_generator_input.tbl_df <- function(x) x
+
+#' @export
+
 .as_generator_input.data.frame <- function(x) as_tibble(x)
 
 #' @export

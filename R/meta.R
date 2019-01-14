@@ -4,7 +4,7 @@
 
 #' @export
 
-.set_meta.xsection_generator <- function(x) {
+.set_meta.data_generator <- function(x) {
   
   x$steps_to_all <- ceiling(nrow(x$data) / x$batch_size)
   
@@ -38,7 +38,7 @@
 
 #' @export
 
-.update_meta.xsection_generator <- function(x) {
+.update_meta.data_generator <- function(x) {
   
   x$steps_to_all <- ceiling(nrow(x$data) / x$batch_size)
   
@@ -73,17 +73,5 @@
     x$preview$y <- select(x$preview$data, !!!x$y_select)
     
   x
-  
-}
-
-#' @export
-
-.get_meta <- function(x) UseMethod(".get_meta")
-
-#' @export
-
-.get_meta.xsection_generator <- function(x) {
-  
-  as.list(environment(x))
   
 }
