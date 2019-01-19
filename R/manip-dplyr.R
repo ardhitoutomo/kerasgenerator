@@ -12,45 +12,9 @@ select.keras_generator <- function(x, ...) {
 
 #' @export
 
-mutate.keras_generator <- function(x, ...) {
-  
-  x$data <- mutate(x$data, !!!enquos(...))
-  
-  x <- .update_meta(x)
-  
-  x
-  
-}
-
-#' @export
-
-filter.keras_generator <- function(x, ...) {
-  
-  x$data <- filter(x$data, !!!enquos(...))
-  
-  x <- .update_meta(x)
-
-  x
-  
-}
-
-#' @export
-
 slice.keras_generator <- function(x, ...) {
   
   x$data <- slice(x$data, !!!enquos(...))
-  
-  x <- .update_meta(x)
-  
-  x
-  
-}
-
-#' @export
-
-group_by.keras_generator <- function(x, ...) {
-  
-  x$data <- group_by(x$data, !!!enquos(...))
   
   x <- .update_meta(x)
   

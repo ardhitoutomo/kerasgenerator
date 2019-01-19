@@ -1,109 +1,39 @@
-#' @importFrom magrittr %>%
+#' @importFrom magrittr %>% %<>% %$% %T>%
 #' @export
 
-magrittr::`%>%`
+NULL
 
-#' @importFrom magrittr %<>%
+#' @importFrom dplyr filter group_by mutate select slice ungroup
 #' @export
 
-magrittr::`%<>%`
-
-#' @importFrom magrittr %T>%
-#' @export
-
-magrittr::`%T>%`
-
-#' @importFrom dplyr select
-#' @export
-
-dplyr::select
-
-#' @importFrom dplyr mutate
-#' @export
-
-dplyr::mutate
-
-#' @importFrom dplyr filter
-#' @export
-
-dplyr::filter
-
-#' @importFrom dplyr slice
-#' @export
-
-dplyr::slice
-
-#' @importFrom dplyr group_by
-#' @export
-
-dplyr::group_by
+NULL
 
 #' @importFrom recipes bake
 #' @export
 
-recipes::bake
+NULL
 
 #' @importFrom rlang enquos
 #' @export
 
-rlang::enquos
+NULL
 
-#' @importFrom tibble as_tibble
+#' @importFrom tidyr gather spread
 #' @export
 
-tibble::as_tibble
+NULL
 
-#' @importFrom tibble is_tibble
+#' @importFrom tibble as_tibble is_tibble glimpse
 #' @export
 
-tibble::is_tibble
+NULL
 
-#' @importFrom tibble glimpse
+#' @importFrom stringr str_replace_all
 #' @export
 
-tibble::glimpse
+NULL
 
-#' @importFrom tidyselect contains
+#' @importFrom utils head
 #' @export
 
-tidyselect::contains
-
-#' @importFrom tidyselect ends_with
-#' @export
-
-tidyselect::ends_with
-
-#' @importFrom tidyselect everything
-#' @export
-
-tidyselect::everything
-
-#' @importFrom tidyselect matches
-#' @export
-
-tidyselect::matches
-
-#' @importFrom tidyselect num_range
-#' @export
-
-tidyselect::num_range
-
-#' @importFrom tidyselect one_of
-#' @export
-
-tidyselect::one_of
-
-#' @importFrom tidyselect starts_with
-#' @export
-
-tidyselect::starts_with
-
-#' @importFrom tidyselect last_col
-#' @export
-
-tidyselect::last_col
-
-#' @importFrom tidyselect vars_select
-#' @export
-
-tidyselect::vars_select
+NULL

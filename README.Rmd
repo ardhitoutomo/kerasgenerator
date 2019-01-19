@@ -9,7 +9,9 @@ knitr::opts_chunk$set(
   message = FALSE,
   fig.path = "man/figures/README-",
   fig.align = "center",
-  out.width = "100%"
+  out.width = "100%",
+  collapse = TRUE,
+  comment = "#>"
 )
 
 ```
@@ -25,13 +27,11 @@ knitr::opts_chunk$set(
 The package is in early development stage and currently only available via GitHub. You can install the development version using [`install_github()`](http://devtools.r-lib.org/reference/install_github):
 
 ```{r, eval=FALSE}
-
 # install devtools first if you haven't
 if (!require(devtools)) install.packages("devtools")
 
 # install the development version from GitHub
 devtools::install_github("bagasbgy/kerasgenerator")
-
 ```
 
 ## Compatibility
@@ -39,28 +39,127 @@ devtools::install_github("bagasbgy/kerasgenerator")
 Most of `kerasgenerator` functionalities are using `dplyr` and `recipes` interface to make data preparation process easier. Note that you must import `kerasgenerator` after `keras` library imported to make the package works properly:
 
 ```{r}
-
 # import libs
 library(dplyr)
 library(keras)
 library(kerasgenerator)
 library(recipes)
-
 ```
 
-## Usage
+## Designing a generator
 
 Let's make a quick example using `iris` dataset. For a simple model that use cross-sectional data, you can start by using `data_generator()` to convert the data into pre-compiled generator:
 
 ```{r}
-
+# initiate a generator
 gen <- data_generator(iris, batch_size = 32, shuffle = TRUE)
 
 gen
+```
+
+The pre-compiled generator is partially-compatible with `dplyr` and `recipes` API. For example, you can create the dummy variables and do some preprocessing using `recipes`, and add some feature engineering using `mutate`:
+
+```{r}
+# create a recipes
+rec <- recipe(Species ~ . - Species, iris) %>%
+  step_mutate(
+    Petal.Ratio = Petal.Length / Petal.Width,
+    Sepal.Ratio = Sepal.Length / Sepal.Width
+  ) %>%
+  step_sqrt(all_numeric()) %>%
+  step_center(all_numeric()) %>%
+  step_scale(all_numeric()) %>%
+  step_dummy(all_nominal(), one_hot = TRUE) %>%
+  prep()
+
+# store the recipes to generator
+gen %>%
+  add_recipe(rec = rec)
 
 ```
 
+If you already done with data preprocessing parts, you can declare which variables you want to use as `x` and `y` using `select_x` and `select_y`:
 
+```{r}
+gen %<>%
+  add_recipe(rec = rec) %>%
+  select_x(-starts_with("Species")) %>%
+  select_y(starts_with("Species"))
+```
+
+**Note** that I used `%<>%` (assign pipe) from `magrittr` just for efficiency.
+
+Saving the generator after selecting the variables is very recommended, since it makes the following sample splitting process become easier:
+
+```{r}
+# sample index
+set.seed(1)
+intrain <- sample(nrow(iris), nrow(iris) * 0.8)
+
+# split sample using dplyr's slice
+train_gen <- gen %>%
+  slice(intrain) %>%
+  build_generator()
+
+val_gen <- gen %>%
+  slice(-intrain) %>%
+  build_generator()
+```
+
+And now we are ready to test some functionalities in the model fitting process.
+
+## Model fitting using generator
+
+In building Keras model, `kerasgenerator` provided some helpers function for defining some parameters related to the data. This is can be done from `get_meta()` function. For example, you can use `get_meta()` for getting the `input_shape` and `output_shape`:
+
+```{r}
+model <- keras_model_sequential() %>%
+
+  layer_dense(
+    name = "dense1",
+    units = 16,
+    input_shape = get_meta(train_gen, "input_shape")
+  ) %>%
+  
+  layer_dense(
+    name = "dense2",
+    units = 8
+  ) %>%
+  
+  layer_dense(
+    name = "dense_output",
+    units = get_meta(train_gen, "output_shape"),
+    activation = "softmax"
+  )
+
+model %>% compile(
+  optimizer = "adam",
+  metrics = "accuracy",
+  loss = "categorical_crossentropy"
+)
+```
+
+In addition, `kerasgenerator` also masking the `*_generator()` function from `keras` in order to make those functions know the generator characteristic, like the number of `steps_per_epoch`/`steps`, and by default the `*_generator()` will use it as default parameters unless you want to override it manually.
+
+So now, when fitting using `kerasgenerator`, you just need to pass the generator(s):
+
+```{r}
+history <- model %>% fit_generator(
+  generator = train_gen,
+  validation_data = val_gen,
+  epochs = 30
+)
+
+plot(history)
+```
+
+and it's also works for `evaluate_generator` and `predict_generator`. Note that `predict_generator` also provided `tidy_output` option to specify whether the prediction output should be tidied. The default value for this option is set to `TRUE`:
+
+```{r}
+model %>% evaluate_generator(val_gen)
+
+model %>% predict_generator(val_gen)
+```
 
 ## Further Development
 
