@@ -1,6 +1,4 @@
-#' @export
-
-.enclose <- function(..., sep = "/", enc = "[") {
+enclose <- function(..., sep = "/", enc = "[") {
   
   strings <- c(...)
   
@@ -8,12 +6,16 @@
   
     paste0("[", paste0(strings, collapse = sep), "]")
   
-  if (enc == "(")
+  else if (enc == "(")
   
     paste0("(", paste0(strings, collapse = sep), ")")
   
-  if (enc == "<")
+  else if (enc == "<")
   
     paste0("<", paste0(strings, collapse = sep), ">")
+    
+  else
+  
+    paste0(strings, collapse = sep)
   
 }

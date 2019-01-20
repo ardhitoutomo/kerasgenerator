@@ -4,7 +4,20 @@ authors:
 development:
   mode: auto
 reference:
-  - title: Data Generator for Time Series Models
+  - title: Data Generator
+    contents:
+      - create_generator
+  - title: Time Series Utilities
     contents:
       - forecast_generator
       - series_generator
+  - title: Data Manipulation
+    contents:
+      - select_x_y
+      - inject_recipe
+  - title: Tools
+    contents:
+      - build
+      - reset_generator
+      - get_meta
+      - get_batch

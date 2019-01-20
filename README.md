@@ -44,14 +44,18 @@ convert the data into pre-compiled generator:
 
 ``` r
 # initiate a generator
-gen <- data_generator(iris, batch_size = 32, shuffle = TRUE)
+gen <- create_generator(
+  data = iris,
+  batch_size = 32,
+  shuffle = TRUE
+)
 
 gen
 #> A keras generator with: 
 #> - Number of arrays: 0 
 #> - Steps to see all data: 5 steps 
 #> 
-#> Batch preview: 
+#> Batch [1/5] preview: 
 #> 
 #> Observations: 32
 #> Variables: 5
@@ -82,12 +86,12 @@ rec <- recipe(Species ~ . - Species, iris) %>%
 
 # store the recipes to generator
 gen %>%
-  add_recipe(rec = rec)
+  inject_recipe(rec = rec)
 #> A keras generator with: 
 #> - Number of arrays: 0 
 #> - Steps to see all data: 5 steps 
 #> 
-#> Batch preview: 
+#> Batch [1/5] preview: 
 #> 
 #> Observations: 32
 #> Variables: 9
@@ -108,7 +112,7 @@ variables you want to use as `x` and `y` using `select_x` and
 
 ``` r
 gen %<>%
-  add_recipe(rec = rec) %>%
+  inject_recipe(rec = rec) %>%
   select_x(-starts_with("Species")) %>%
   select_y(starts_with("Species"))
 ```
@@ -122,7 +126,7 @@ since it makes the following sample splitting process become easier:
 ``` r
 # sample index
 set.seed(1)
-intrain <- sample(nrow(iris), nrow(iris) * 0.8)
+intrain <- sample(nrow(iris), nrow(iris) * 0.7)
 
 # split sample using dplyr's slice
 train_gen <- gen %>%
@@ -177,8 +181,8 @@ characteristic, like the number of `steps_per_epoch`/`steps`, and by
 default the `*_generator()` will use it as default parameters unless you
 want to override it manually.
 
-So now, when fitting using `kerasgenerator`, you just need to pass the
-generator(s):
+For example, when fitting using `kerasgenerator`, you just need to pass
+the generator(s) and it will automatically recognize the generator(s):
 
 ``` r
 history <- model %>% fit_generator(
@@ -192,34 +196,33 @@ plot(history)
 
 <img src="man/figures/README-unnamed-chunk-8-1.png" width="100%" style="display: block; margin: auto;" />
 
-and it’s also works for `evaluate_generator` and `predict_generator`.
-Note that `predict_generator` also provided `tidy_output` option to
-specify whether the prediction output should be tidied. The default
-value for this option is set to `TRUE`:
+Note that `predict_generator` also provided `label` option to specify
+whether the prediction output should be tidied. The default value for
+this option is set to `TRUE`:
 
 ``` r
 model %>% evaluate_generator(val_gen)
 #> $loss
-#> [1] 0.367352
+#> [1] 0.4129977
 #> 
 #> $acc
-#> [1] 0.8333333
+#> [1] 0.8
 
 model %>% predict_generator(val_gen)
-#> # A tibble: 30 x 4
-#>      setosa versicolor virginica class 
-#>       <dbl>      <dbl>     <dbl> <fct> 
-#>  1 0.990       0.00943  0.000247 setosa
-#>  2 0.0340      0.347    0.619    setosa
-#>  3 0.0156      0.800    0.184    setosa
-#>  4 0.00278     0.496    0.501    setosa
-#>  5 0.996       0.00374  0.000149 setosa
-#>  6 0.000604    0.845    0.154    setosa
-#>  7 0.00116     0.275    0.723    setosa
-#>  8 0.0313      0.488    0.480    setosa
-#>  9 0.0218      0.482    0.497    setosa
-#> 10 0.998       0.00159  0.000144 setosa
-#> # … with 20 more rows
+#> # A tibble: 45 x 4
+#>    setosa versicolor virginica label 
+#>     <dbl>      <dbl>     <dbl> <fct> 
+#>  1 0.970      0.0249   0.00528 setosa
+#>  2 0.938      0.0561   0.00552 setosa
+#>  3 0.0284     0.457    0.515   setosa
+#>  4 0.0458     0.691    0.263   setosa
+#>  5 0.966      0.0120   0.0218  setosa
+#>  6 0.109      0.471    0.420   setosa
+#>  7 0.0178     0.389    0.593   setosa
+#>  8 0.0172     0.842    0.141   setosa
+#>  9 0.0669     0.267    0.667   setosa
+#> 10 0.985      0.0114   0.00337 setosa
+#> # … with 35 more rows
 ```
 
 ## Further Development

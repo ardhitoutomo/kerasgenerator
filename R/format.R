@@ -1,6 +1,6 @@
 #' @export
 
-glimpse.keras_generator <- function(x, ...) {
+glimpse.tbl_kg <- function(x, ...) {
   
   cat("A keras generator with:", "\n")
     
@@ -15,9 +15,9 @@ glimpse.keras_generator <- function(x, ...) {
 
 #' @export
 
-glimpse.data_generator <- function(x, ...) {
+glimpse.kg_xs <- function(x, ...) {
   
-  cat("Batch", .enclose(x$partition, x$steps_to_all), "preview:", "\n")
+  cat("Batch", enclose(x$partition, x$steps_to_all), "preview:", "\n")
   
   cat("\n")
     
@@ -27,7 +27,7 @@ glimpse.data_generator <- function(x, ...) {
     
     cat("\n")
     
-    x_dim <- .enclose(nrow(x$preview$x), ncol(x$preview$x), sep = ", ")
+    x_dim <- enclose(nrow(x$preview$x), ncol(x$preview$x), sep = ", ")
     
     cat("X array with", x_dim, "dimension", "\n")
     
@@ -41,7 +41,7 @@ glimpse.data_generator <- function(x, ...) {
     
     cat("\n")
     
-    y_dim <- .enclose(nrow(x$preview$y), ncol(x$preview$y), sep = ", ")
+    y_dim <- enclose(nrow(x$preview$y), ncol(x$preview$y), sep = ", ")
     
     cat("Y array with", y_dim, "dimension", "\n")
     
@@ -55,8 +55,8 @@ glimpse.data_generator <- function(x, ...) {
 
 #' @export
 
-print.keras_generator <- function(x, ...) glimpse(x)
+print.tbl_kg <- function(x, ...) glimpse(x)
 
 #' @export
 
-head.keras_generator <- function(x, ...) glimpse(x)
+head.tbl_kg <- function(x, ...) glimpse(x)

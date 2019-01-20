@@ -1,34 +1,22 @@
+# build generator --------------------------------------------------------------
+
+#' @rdname build
+#' @importFrom recipes bake
+#' @importFrom rlang !!! enquos
 #' @export
 
-data_generator <- function(data, batch_size = 32,
-                           shuffle = TRUE, seed = 1) {
+build_generator.kg_xs <- function(x, ...) {
   
-  data <- .as_generator_input(data)
-
-  x <- as.list(environment())
+  # unlist meta data to generator's env
+  list2env(build_generator_env(x), environment())
   
-  class(x) <- c("keras_generator", "data_generator")
-  
-  x <- .set_meta(x)
-  
-  x
-  
-}
-
-#' @export
-
-build_generator <- function(x) UseMethod("build_generator")
-
-#' @export
-
-build_generator.data_generator <- function(x) {
-
-  list2env(.build_generator_env(x), environment())
-  
+  # remove unused meta list
   rm(x)
 
+  # define generator
   x <- function() {
     
+    # set current batch profile
     if (shuffle) {
 
       set.seed(seed)
@@ -42,8 +30,9 @@ build_generator.data_generator <- function(x) {
     }
     
     n <- length(rows)
-
-    batch <- data[rows, ]
+    
+    # get current batch
+    batch <- slice(data, rows)
 
     if (exists("rec")) batch <- bake(rec, batch)
 
@@ -67,10 +56,12 @@ build_generator.data_generator <- function(x) {
 
     }
     
+    # update iteration
     if (partition + 1 > steps_to_all) partition <<- 1
 
     else partition <<- partition + 1
 
+    # resolving output
     if (output == "x") list(x_array)
 
     else if (output == "y") list(y_array)
@@ -79,24 +70,22 @@ build_generator.data_generator <- function(x) {
 
   }
   
-  class(x) <- c("data_generator", "function")
+  # return the generator
+  structure(x, class = c("kg_xs", "function"))
   
-  x
-
 }
 
-#' @export
-
-.build_generator_env <- function(x) UseMethod(".build_generator_env")
+# build generator environment --------------------------------------------------
 
 #' @export
 
-.build_generator_env.data_generator <- function(x) {
+build_generator_env.kg_xs <- function(x) {
 
   if (is.null(x$x_select) & is.null(x$y_select))
 
     stop("select either x or y first")
-
+    
+  # set x and y profile
   if (!is.null(x$x_select)) {
 
     x$x_names <- colnames(x$preview$x)
@@ -117,8 +106,10 @@ build_generator.data_generator <- function(x) {
     
   }
   
+  # remove unused preview data
   x$preview <- NULL
 
+  # set output profile
   if (is.null(x$x_select)) x$output <- "y"
 
   else if (is.null(x$y_select)) x$output <- "x"

@@ -52,7 +52,11 @@ Let's make a quick example using `iris` dataset. For a simple model that use cro
 
 ```{r}
 # initiate a generator
-gen <- data_generator(iris, batch_size = 32, shuffle = TRUE)
+gen <- create_generator(
+  data = iris,
+  batch_size = 32,
+  shuffle = TRUE
+)
 
 gen
 ```
@@ -74,7 +78,7 @@ rec <- recipe(Species ~ . - Species, iris) %>%
 
 # store the recipes to generator
 gen %>%
-  add_recipe(rec = rec)
+  inject_recipe(rec = rec)
 
 ```
 
@@ -82,7 +86,7 @@ If you already done with data preprocessing parts, you can declare which variabl
 
 ```{r}
 gen %<>%
-  add_recipe(rec = rec) %>%
+  inject_recipe(rec = rec) %>%
   select_x(-starts_with("Species")) %>%
   select_y(starts_with("Species"))
 ```
@@ -94,7 +98,7 @@ Saving the generator after selecting the variables is very recommended, since it
 ```{r}
 # sample index
 set.seed(1)
-intrain <- sample(nrow(iris), nrow(iris) * 0.8)
+intrain <- sample(nrow(iris), nrow(iris) * 0.7)
 
 # split sample using dplyr's slice
 train_gen <- gen %>%
@@ -141,7 +145,7 @@ model %>% compile(
 
 In addition, `kerasgenerator` also masking the `*_generator()` function from `keras` in order to make those functions know the generator characteristic, like the number of `steps_per_epoch`/`steps`, and by default the `*_generator()` will use it as default parameters unless you want to override it manually.
 
-So now, when fitting using `kerasgenerator`, you just need to pass the generator(s):
+For example, when fitting using `kerasgenerator`, you just need to pass the generator(s) and it will automatically recognize the generator(s):
 
 ```{r}
 history <- model %>% fit_generator(
@@ -153,7 +157,7 @@ history <- model %>% fit_generator(
 plot(history)
 ```
 
-and it's also works for `evaluate_generator` and `predict_generator`. Note that `predict_generator` also provided `tidy_output` option to specify whether the prediction output should be tidied. The default value for this option is set to `TRUE`:
+Note that `predict_generator` also provided `label` option to specify whether the prediction output should be tidied. The default value for this option is set to `TRUE`:
 
 ```{r}
 model %>% evaluate_generator(val_gen)

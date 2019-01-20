@@ -1,39 +1,69 @@
-#' @importFrom magrittr %>% %<>% %$% %T>%
+#' @importFrom magrittr %>%
 #' @export
 
-NULL
+magrittr::`%>%`
 
-#' @importFrom dplyr filter group_by mutate select slice ungroup
+#' @importFrom magrittr %<>%
 #' @export
 
-NULL
+magrittr::`%<>%`
 
-#' @importFrom recipes bake
+#' @importFrom dplyr filter
 #' @export
 
-NULL
+dplyr::filter
 
-#' @importFrom rlang enquos
+#' @importFrom dplyr group_by
 #' @export
 
-NULL
+dplyr::group_by
 
-#' @importFrom tidyr gather spread
+#' @importFrom dplyr mutate
 #' @export
 
-NULL
+dplyr::mutate
 
-#' @importFrom tibble as_tibble is_tibble glimpse
+#' @importFrom dplyr select
 #' @export
 
-NULL
+dplyr::select
+
+#' @importFrom dplyr slice
+#' @export
+
+dplyr::slice
+
+#' @importFrom dplyr summarise
+#' @export
+
+dplyr::summarise
+
+#' @importFrom dplyr ungroup
+#' @export
+
+dplyr::ungroup
+
+#' @importFrom tidyr gather
+#' @export
+
+tidyr::gather
+
+#' @importFrom tidyr spread
+#' @export
+
+tidyr::spread
+
+#' @importFrom tibble glimpse
+#' @export
+
+tibble::glimpse
 
 #' @importFrom stringr str_replace_all
 #' @export
 
-NULL
+stringr::str_replace_all
 
 #' @importFrom utils head
 #' @export
 
-NULL
+utils::head

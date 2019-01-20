@@ -1,55 +1,72 @@
+#' @importFrom rlang !!! enquos
 #' @export
 
-select.keras_generator <- function(x, ...) {
+filter.tbl_kg <- function(x, ...) {
   
+  # apply filter
+  x$data <- filter(x$data, !!!enquos(...))
+  
+  # update meta
+  set_meta(x)
+  
+}
+
+#' @export
+
+group_by.tbl_kg <- function(x, ...) {
+  
+  # apply group_by
+  x$data <- group_by(x$data, !!!enquos(...))
+  
+  # update meta
+  set_meta(x)
+  
+}
+
+#' @export
+
+mutate.tbl_kg <- function(x, ...) {
+  
+  # apply mutate
+  x$data <- mutate(x$data, !!!enquos(...))
+  
+  # update meta
+  set_meta(x)
+  
+}
+
+#' @export
+
+select.tbl_kg <- function(x, ...) {
+  
+  # apply select
   x$data <- select(x$data, !!!enquos(...))
   
-  x <- .update_meta(x)
-  
-  x
+  # update meta
+  set_meta(x)
   
 }
 
 #' @export
 
-slice.keras_generator <- function(x, ...) {
+slice.tbl_kg <- function(x, ...) {
   
+  # apply slice
   x$data <- slice(x$data, !!!enquos(...))
   
-  x <- .update_meta(x)
-  
-  x
-  
-}
-
-#' @export
-
-select_x <- function(x, ...) UseMethod("select_x")
-
-#' @export
-
-select_x.data_generator <- function(x, ...) {
-  
-  x$x_select <- enquos(...)
-  
-  x <- .update_meta(x)
-  
-  x
+  # update meta
+  set_meta(x)
   
 }
 
 #' @export
 
-select_y <- function(x, ...) UseMethod("select_y")
-
-#' @export
-
-select_y.data_generator <- function(x, ...) {
+summarise.tbl_kg <- function(x, ...) {
   
-  x$y_select <- enquos(...)
+  # apply summarise
+  x$data <- summarise(x$data, !!!enquos(...))
   
-  x <- .update_meta(x)
-  
-  x
+  # update meta
+  set_meta(x)
   
 }
