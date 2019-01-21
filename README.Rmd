@@ -2,8 +2,7 @@
 output: github_document
 ---
 
-```{r setup, include = FALSE}
-
+```{r setup, include=FALSE}
 knitr::opts_chunk$set(
   warning = FALSE,
   message = FALSE,
@@ -13,7 +12,6 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-
 ```
 
 # kerasgenerator <img src="man/figures/logo.svg" align="right" height=140/>
@@ -79,7 +77,6 @@ rec <- recipe(Species ~ . - Species, iris) %>%
 # store the recipes to generator
 gen %>%
   inject_recipe(rec = rec)
-
 ```
 
 If you already done with data preprocessing parts, you can declare which variables you want to use as `x` and `y` using `select_x` and `select_y`:

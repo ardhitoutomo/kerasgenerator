@@ -5,8 +5,11 @@ set_meta.kg_ts <- function(x) {
   # handle data size
   x <- handle_data_size(x, x$data)
   
+  # readjust data size
+  x$true_data_size <- nrow(x$data) - x$lookback - x$timesteps + 1
+  
   # set data profile
-  x$steps_to_all <- ceiling(x$data_size / x$batch_size)
+  x$steps_to_all <- ceiling(x$true_data_size / x$batch_size)
   
   x$partition <- 1
   

@@ -22,7 +22,7 @@ set_generator <- function(data, batch_size = 32,
                           shuffle = TRUE, seed = 1) {
   
   # wrap-up
-  x <- structure(as.list(environment()), class = c("tbl_kg", "kg_xs"))
+  x <- structure(as.list(environment()), class = c("kg_xs", "tbl_kg"))
   
   # set initial meta
   set_meta(x)
@@ -43,7 +43,7 @@ set_generator <- function(data, batch_size = 32,
 #'  of lookback period
 #' @param timesteps A `numeric` vector which identify the number
 #'  of timesteps length
-#' @inheritParams set_data_generator
+#' @inheritParams set_generator
 #'
 #' @return A keras generator meta
 #'
@@ -53,7 +53,7 @@ set_series_generator <- function(data, lookback = 1, timesteps = 1,
                                  batch_size = 32, shuffle = TRUE, seed = 1) {
   
   # wrap-up
-  x <- structure(as.list(environment()), class = c("tbl_kg", "kg_ts"))
+  x <- structure(as.list(environment()), class = c("kg_ts", "tbl_kg"))
   
   # set initial meta
   set_meta(x)

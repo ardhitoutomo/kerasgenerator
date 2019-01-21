@@ -14,7 +14,6 @@
 \alias{ungroup}
 \alias{gather}
 \alias{spread}
-\alias{glimpse}
 \alias{str_replace_all}
 \alias{head}
 \title{Objects exported from other packages}
@@ -29,8 +28,6 @@ below to see their documentation.
   \item{magrittr}{\code{\link[magrittr]{\%>\%}}, \code{\link[magrittr]{\%<>\%}}}
 
   \item{stringr}{\code{\link[stringr]{str_replace_all}}}
-
-  \item{tibble}{\code{\link[tibble]{glimpse}}}
 
   \item{tidyr}{\code{\link[tidyr]{gather}}, \code{\link[tidyr]{spread}}}
 

@@ -1,6 +1,6 @@
 #' @export
 
-glimpse.tbl_kg <- function(x, ...) {
+print.kg_xs <- function(x, ...) {
   
   cat("A keras generator with:", "\n")
     
@@ -13,7 +13,7 @@ glimpse.tbl_kg <- function(x, ...) {
   
   cat("\n")
     
-  glimpse(x$preview$data)
+  print(x$preview$data)
   
   if (!is.null(x$preview$x)) {
     
@@ -25,7 +25,7 @@ glimpse.tbl_kg <- function(x, ...) {
     
     cat("\n")
     
-    glimpse(x$preview$x)
+    print(x$preview$x)
     
   }
   
@@ -39,17 +39,9 @@ glimpse.tbl_kg <- function(x, ...) {
     
     cat("\n")
     
-    glimpse(x$preview$y)
+    print(x$preview$y)
     
   }
 
   
 }
-
-#' @export
-
-print.tbl_kg <- function(x, ...) glimpse(x)
-
-#' @export
-
-head.tbl_kg <- function(x, ...) glimpse(x)

@@ -53,11 +53,6 @@ tidyr::gather
 
 tidyr::spread
 
-#' @importFrom tibble glimpse
-#' @export
-
-tibble::glimpse
-
 #' @importFrom stringr str_replace_all
 #' @export
 

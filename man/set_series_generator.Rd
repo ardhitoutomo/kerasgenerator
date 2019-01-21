@@ -16,6 +16,15 @@ of lookback period}
 
 \item{timesteps}{A \code{numeric} vector which identify the number
 of timesteps length}
+
+\item{batch_size}{An \code{integer} value indicating how many observation is
+considered as a batch}
+
+\item{shuffle}{A \code{logical} indicating whether to shuffle the observation
+within the batch}
+
+\item{seed}{An optional \code{integer} value for passing to \code{set.seed()} if
+\code{shuffle} is \code{TRUE}}
 }
 \value{
 A keras generator meta
