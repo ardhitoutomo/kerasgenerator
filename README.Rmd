@@ -52,7 +52,7 @@ Let's make a quick example using `iris` dataset. For a simple model that use cro
 
 ```{r}
 # initiate a generator
-gen <- create_generator(
+gen <- set_generator(
   data = iris,
   batch_size = 32,
   shuffle = TRUE

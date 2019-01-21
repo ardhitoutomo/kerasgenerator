@@ -9,14 +9,6 @@ glimpse.tbl_kg <- function(x, ...) {
   
   cat("\n")
   
-  NextMethod()
-  
-}
-
-#' @export
-
-glimpse.kg_xs <- function(x, ...) {
-  
   cat("Batch", enclose(x$partition, x$steps_to_all), "preview:", "\n")
   
   cat("\n")
@@ -50,6 +42,7 @@ glimpse.kg_xs <- function(x, ...) {
     glimpse(x$preview$y)
     
   }
+
   
 }
 
