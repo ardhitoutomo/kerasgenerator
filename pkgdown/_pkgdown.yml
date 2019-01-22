@@ -6,11 +6,8 @@ development:
 reference:
   - title: Data Generator
     contents:
-      - create_generator
-  - title: Time Series Utilities
-    contents:
-      - forecast_generator
-      - series_generator
+      - set_generator
+      - set_series_generator
   - title: Data Manipulation
     contents:
       - select_x_y

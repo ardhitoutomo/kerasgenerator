@@ -83,8 +83,7 @@ predict_generator.default <- keras::predict_generator
 
 #' @export
 
-predict_generator.kg_xs <- function(object, generator,
-                                             ..., label = "single") {
+predict_generator.kg_xs <- function(object, generator, ..., label = "none") {
   
   # wrap-up
   x <- c(as.list(environment()), list(...))
@@ -147,7 +146,9 @@ predict_generator.kg_xs <- function(object, generator,
     
     mutate(pred, label = factor(pred_label$label, levels = colnames(pred)))
     
-  } else {
+  }
+  
+  else if (label == "none") {
     
     pred
     
