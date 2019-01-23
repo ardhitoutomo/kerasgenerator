@@ -44,13 +44,15 @@ set_generator <- function(data, batch_size = 32,
 #' @param timesteps A `numeric` vector which identify the number
 #'  of timesteps length
 #' @inheritParams set_generator
+#' @param timesteps Variable name representing the time index
 #'
 #' @return A keras generator meta
 #'
 #' @export
 
 set_series_generator <- function(data, lookback = 1, timesteps = 1,
-                                 batch_size = 32, shuffle = TRUE, seed = 1) {
+                                 batch_size = 32, shuffle = FALSE,
+                                 seed = 1) {
   
   # wrap-up
   x <- structure(as.list(environment()), class = c("kg_ts", "tbl_kg"))

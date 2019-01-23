@@ -40,26 +40,33 @@ build_generator.kg_ts <- function(x, ...) {
     
     x_rows <- y_rows - lookback
     
-    rows <- c(min(x_rows):max(y_rows))
+    rows <- c((min(x_rows) - timesteps + 1):max(y_rows))
     
     n <- length(y_rows)
     
     # get current batch
     batch <- slice(data, rows)
+    
+    # readjust rows according to batch
+    y_rows <- c((nrow(batch) - n + 1):nrow(batch))
+    
+    x_rows <- y_rows - lookback
 
     if (exists("rec")) batch <- bake(rec, batch)
 
     if (output %in% c("x", "all")) {
-      
-      for (k in c(1:max(x_rows)))
 
       batch_x <- select(batch, !!!x_select)
-
+      
       x_array <- array(0, c(n, timesteps, x_length))
       
-      x_indices <- seq(x_rows[k] - timesteps + 1, x_rows[k])
+      for (k in c(1:length(x_rows))) {
+        
+        x_indices <- seq(x_rows[k] - timesteps + 1, x_rows[k])
 
-      x_array[k, , ] <- data.matrix(batch_x[x_indices, ])
+        x_array[k, , ] <- data.matrix(batch_x[x_indices, ])
+        
+      }
 
     }
 
@@ -88,7 +95,63 @@ build_generator.kg_ts <- function(x, ...) {
   }
   
   # return the generator
-  structure(x, class = c("kg_ts", "function"))
+  structure(x, class = c("kg_ts", "kg", "function"))
+  
+}
+
+#' @export
+
+build_generator.kg_fc <- function(x, ...) {
+  
+  # unlist meta data to generator's env
+  list2env(build_generator_env(x), environment())
+  
+  # remove unused meta list
+  rm(x)
+
+  # define generator
+  x <- function() {
+    
+    # set current batch profile
+    x_rows <- c(i[partition]:j[partition])
+    
+    rows <- c((min(x_rows) - timesteps + 1):max(y_rows))
+    
+    n <- length(x_rows)
+    
+    # get current batch
+    batch <- slice(data, rows)
+    
+    # readjust rows according to batch
+    x_rows <- c((nrow(batch) - n + 1):nrow(batch))
+    
+    if (exists("rec")) batch <- bake(rec, batch)
+
+    batch_x <- select(batch, !!!x_select)
+
+    x_array <- array(0, c(n, timesteps, x_length))
+    
+    for (k in c(1:length(x_rows))) {
+      
+      x_indices <- seq(x_rows[k] - timesteps + 1, x_rows[k])
+
+      x_array[k, , ] <- data.matrix(batch_x[x_indices, ])
+      
+    }
+
+    # update iteration
+    if (partition + 1 > steps_to_all) partition <<- 1
+
+    else partition <<- partition + 1
+
+    # return output
+    list(x_array)
+
+  }
+  
+  # return the generator
+  
+  structure(x, class = c("kg_fc", "kg", "function"))
   
 }
 
@@ -98,9 +161,7 @@ build_generator.kg_ts <- function(x, ...) {
 
 build_generator_env.kg_ts <- function(x) {
 
-  if (is.null(x$x_select) & is.null(x$y_select))
-
-    stop("select either x or y first")
+  if (is.null(x$y_select)) stop("select x and y first")
     
   # set x and y profile
   if (!is.null(x$x_select)) {
@@ -109,7 +170,7 @@ build_generator_env.kg_ts <- function(x) {
     
     x$x_length <- length(x$x_names)
     
-    x$input_shape <- x$x_length
+    x$input_shape <- c(x$timesteps, x$x_length)
     
   }
     
@@ -133,6 +194,27 @@ build_generator_env.kg_ts <- function(x) {
 
   else x$output <- "all"
     
+  x
+
+}
+
+#' @export
+
+build_generator_env.kg_fc <- function(x) {
+
+  # set data profile
+  x$steps_to_all <- ceiling(x$horizon / x$batch_size)
+  
+  x$partition <- 1
+  
+  end <- x$data_size + x$horizon - x$lookback
+  
+  start <- end - x$lookback + 1
+  
+  x$i <- seq(start, by = x$batch_size, length.out = x$steps_to_all)
+  
+  x$j <- c(x$i[-length(x$i)] + x$batch_size - 1, x$data_size)
+  
   x
 
 }

@@ -40,6 +40,7 @@ set_meta.kg_ts <- function(x) {
   
 }
 
+#' @importFrom recipes bake
 #' @importFrom rlang !!!
 #' @export
 
@@ -67,6 +68,9 @@ set_series_preview.tbl_df <- function(x, data, ...) {
   if (!is.null(x$y_select))
   
     x$preview$y <- select(x$preview$data[x$y_rows, ], !!!x$y_select)
+    
+  # readjust data to lookback and timesteps
+  x$preview$data <- x$preview$data[x$y_rows, ]
   
   x
   

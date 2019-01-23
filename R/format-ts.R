@@ -1,11 +1,11 @@
 #' @export
 
-print.kg_xs <- function(x, ...) {
+print.kg_ts <- function(x, ...) {
   
   n_array <- sum(!is.null(x$preview$x), !is.null(x$preview$y))
   
   cat("A keras generator with:", "\n")
-    
+  
   cat("- Number of arrays:", n_array, "\n")
   cat("- Steps to see all data:", x$steps_to_all, "steps", "\n")
   
@@ -21,9 +21,13 @@ print.kg_xs <- function(x, ...) {
     
     cat("\n")
     
-    x_dim <- c(nrow(x$preview$x), ncol(x$preview$x))
+    x_dim <- c(nrow(x$preview$x), x$timesteps, ncol(x$preview$x))
     
     cat("X array with", enclose(x_dim, sep = ", "), "dimension", "\n")
+    
+    cat("\n")
+    
+    cat("Last timesteps preview:", "\n")
     
     cat("\n")
     
@@ -35,9 +39,9 @@ print.kg_xs <- function(x, ...) {
     
     cat("\n")
     
-    y_dim <- enclose(nrow(x$preview$y), ncol(x$preview$y), sep = ", ")
+    y_dim <- c(nrow(x$preview$y), ncol(x$preview$y))
     
-    cat("Y array with", y_dim, "dimension", "\n")
+    cat("Y array with", enclose(y_dim, sep = ", "), "dimension", "\n")
     
     cat("\n")
     

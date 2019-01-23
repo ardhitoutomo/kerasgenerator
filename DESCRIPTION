@@ -20,7 +20,9 @@ Imports:
     tibble,
     tidyselect
 Suggests:
-    testthat
+    testthat,
+    knitr,
+    rmarkdown
 License: MIT + file LICENSE
 URL: https://kerasgenerator.bagasbgy.com
 BugReports: https://github.com/bagasbgy/kerasgenerator/issues

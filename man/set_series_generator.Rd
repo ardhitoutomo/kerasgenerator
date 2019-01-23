@@ -5,7 +5,7 @@
 \title{Set-up a time series data generator meta}
 \usage{
 set_series_generator(data, lookback = 1, timesteps = 1,
-  batch_size = 32, shuffle = TRUE, seed = 1)
+  batch_size = 32, shuffle = FALSE, seed = 1)
 }
 \arguments{
 \item{data}{A \code{data.frame} or \code{tbl}, or \code{tbl_ts} containing
@@ -25,6 +25,8 @@ within the batch}
 
 \item{seed}{An optional \code{integer} value for passing to \code{set.seed()} if
 \code{shuffle} is \code{TRUE}}
+
+\item{timesteps}{Variable name representing the time index}
 }
 \value{
 A keras generator meta

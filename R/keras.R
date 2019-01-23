@@ -13,13 +13,13 @@ fit_generator.default <- keras::fit_generator
 
 #' @export
 
-fit_generator.kg_xs <- function(object, generator, ...) {
+fit_generator.kg <- function(object, generator, ...) {
   
   # wrap-up
-  x <- c(as.list(environment()), list(...))
+  x <- c(list(object = object, generator = generator), list(...))
   
   # ensure from first partition
-  reset_generator(x$gen)
+  reset_generator(x$generator)
   
   # handle steps
   if (is.null(x$steps_per_epoch))
@@ -50,13 +50,13 @@ evaluate_generator.default <- keras::evaluate_generator
 
 #' @export
 
-evaluate_generator.kg_xs <- function(object, generator, ...) {
+evaluate_generator.kg <- function(object, generator, ...) {
   
   # wrap-up
-  x <- c(as.list(environment()), list(...))
+  x <- c(list(object = object, generator = generator), list(...))
   
   # ensure from first partition
-  reset_generator(x$gen)
+  reset_generator(x$generator)
 
   # handle steps
   if (is.null(x$steps))
@@ -83,16 +83,13 @@ predict_generator.default <- keras::predict_generator
 
 #' @export
 
-predict_generator.kg_xs <- function(object, generator, ..., label = "none") {
+predict_generator.kg <- function(object, generator, ..., label = "none") {
   
   # wrap-up
-  x <- c(as.list(environment()), list(...))
-  
-  # remove unused
-  x$label <- NULL
+  x <- c(list(object = object, generator = generator), list(...))
   
   # ensure from first partition
-  reset_generator(x$gen)
+  reset_generator(x$generator)
 
   # set output to only x
   assign("output", "x", envir = environment(x$generator))

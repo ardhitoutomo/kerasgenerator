@@ -35,6 +35,7 @@ set_meta.kg_xs <- function(x) {
   
 }
 
+#' @importFrom recipes bake
 #' @importFrom rlang !!!
 #' @export
 

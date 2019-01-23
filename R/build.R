@@ -84,7 +84,7 @@ build_generator.kg_xs <- function(x, ...) {
   }
   
   # return the generator
-  structure(x, class = c("kg_xs", "function"))
+  structure(x, class = c("kg_xs", "kg", "function"))
   
 }
 
