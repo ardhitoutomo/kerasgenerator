@@ -1,6 +1,6 @@
 Package: kerasgenerator
 Title: Data Generator for R interface to Keras
-Version: 0.2.0
+Version: 0.1.9
 Authors@R:
   person(
     given = "R. Dimas Bagas",
