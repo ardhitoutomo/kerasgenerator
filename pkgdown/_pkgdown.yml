@@ -1,10 +1,20 @@
 authors:
   R. Dimas Bagas Herlambang:
-    href: https://bagasbgy.netlify.com
+    href: https://bagasbgy.com
 development:
   mode: auto
 reference:
-  - title: Data Generator for Time Series Models
+  - title: Data Generator
     contents:
-      - forecast_generator
-      - series_generator
+      - set_generator
+      - set_series_generator
+  - title: Data Manipulation
+    contents:
+      - select_x_y
+      - inject_recipe
+  - title: Tools
+    contents:
+      - build
+      - reset_generator
+      - get_meta
+      - get_batch

@@ -1,6 +1,6 @@
 Package: kerasgenerator
 Title: Data Generator for R interface to Keras
-Version: 0.1.3
+Version: 0.1.9
 Authors@R:
   person(
     given = "R. Dimas Bagas",
@@ -9,14 +9,26 @@ Authors@R:
     email = "bagasbgy@gmail.com"
   )
 Description: Some Keras data generator functions for various deep learning scenario. Designed to make data generation process for fitting a Keras model easier.
+Depends:
+    R (>= 3.5.0)
+Imports:
+    dplyr,
+    keras,
+    magrittr,
+    recipes,
+    rlang,
+    tibble,
+    tidyselect
+Suggests:
+    testthat,
+    knitr,
+    rmarkdown
 License: MIT + file LICENSE
-URL: https://github.com/bagasbgy/kerasgenerator
+URL: https://kerasgenerator.bagasbgy.com
 BugReports: https://github.com/bagasbgy/kerasgenerator/issues
 Encoding: UTF-8
 Language: en-US
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.1.1
-Suggests:
-    keras,
-    testthat
+VignetteBuilder: knitr

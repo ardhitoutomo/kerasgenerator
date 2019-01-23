@@ -36,18 +36,18 @@ printf '\n--------------------\n\n'
 # install the package
 Rscript -e 'devtools::install()'
 
-# check
-#--------------------
-
-# printf
-printf '\n\nRunning check...'
-printf '\n--------------------\n\n'
-
-# run check
-Rscript -e 'devtools::check()'
-
-# end
-#--------------------
-
-# printf
-printf '\n> Package update finished!\n\n'
+# # check
+# #--------------------
+#
+# # printf
+# printf '\n\nRunning check...'
+# printf '\n--------------------\n\n'
+#
+# # run check
+# Rscript -e 'devtools::check()'
+#
+# # end
+# #--------------------
+#
+# # printf
+# printf '\n> Package update finished!\n\n'

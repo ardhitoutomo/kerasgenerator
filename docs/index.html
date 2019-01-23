@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">kerasgenerator</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -53,30 +53,11 @@
 <li>
   <a href="reference/index.html">Reference</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-<li>
-      <a href="articles/timeseries.html">Data Generator for Time Series Models</a>
-    </li>
-  </ul>
-</li>
 <li>
   <a href="news/index.html">Changelog</a>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right">
-<li>
-  <a href="https://github.com/bagasbgy/kerasgenerator">
-    <span class="fa fa-github fa-lg"></span>
-     
-  </a>
-</li>
-      </ul>
+<ul class="nav navbar-nav navbar-right"></ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -91,12 +72,15 @@
 
     
     
-<!-- README.md is generated from README.Rmd. Please edit that file -->
 <div id="kerasgenerator" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#kerasgenerator" class="anchor"></a>kerasgenerator <img src="reference/figures/logo.svg" align="right" height="140/">
 </h1></div>
 <p><code>kerasgenerator</code> package is shipped with some data generator functions, which are designed to make the data generation process for <a href="https://keras.rstudio.com"><code>keras</code></a> models easier.</p>
+</div>
+<div id="getting-started" class="section level1">
+<h1 class="hasAnchor">
+<a href="#getting-started" class="anchor"></a>Getting Started</h1>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
@@ -106,6 +90,157 @@
 <a class="sourceLine" id="cb1-3" data-line-number="3"></a>
 <a class="sourceLine" id="cb1-4" data-line-number="4"><span class="co"># install the development version from GitHub</span></a>
 <a class="sourceLine" id="cb1-5" data-line-number="5">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"bagasbgy/kerasgenerator"</span>)</a></code></pre></div>
+</div>
+<div id="compatibility" class="section level2">
+<h2 class="hasAnchor">
+<a href="#compatibility" class="anchor"></a>Compatibility</h2>
+<p>Most of <code>kerasgenerator</code> functionalities are using <code>dplyr</code> and <code>recipes</code> interface to make data preparation process easier. Note that you must import <code>kerasgenerator</code> after <code>keras</code> library imported to make the package works properly:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co"># import libs</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(dplyr)</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(keras)</a>
+<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(kerasgenerator)</a>
+<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(recipes)</a></code></pre></div>
+</div>
+<div id="designing-a-generator" class="section level2">
+<h2 class="hasAnchor">
+<a href="#designing-a-generator" class="anchor"></a>Designing a generator</h2>
+<p>Let’s make a quick example using <code>iris</code> dataset. For a simple model that use cross-sectional data, you can start by using <code>data_generator()</code> to convert the data into pre-compiled generator:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># initiate a generator</span></a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">gen &lt;-<span class="st"> </span><span class="kw"><a href="reference/create_generator.html">create_generator</a></span>(</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">  <span class="dt">data =</span> iris,</a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">  <span class="dt">batch_size =</span> <span class="dv">32</span>,</a>
+<a class="sourceLine" id="cb3-5" data-line-number="5">  <span class="dt">shuffle =</span> <span class="ot">TRUE</span></a>
+<a class="sourceLine" id="cb3-6" data-line-number="6">)</a>
+<a class="sourceLine" id="cb3-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb3-8" data-line-number="8">gen</a>
+<a class="sourceLine" id="cb3-9" data-line-number="9"><span class="co">#&gt; A keras generator with: </span></a>
+<a class="sourceLine" id="cb3-10" data-line-number="10"><span class="co">#&gt; - Number of arrays: 0 </span></a>
+<a class="sourceLine" id="cb3-11" data-line-number="11"><span class="co">#&gt; - Steps to see all data: 5 steps </span></a>
+<a class="sourceLine" id="cb3-12" data-line-number="12"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb3-13" data-line-number="13"><span class="co">#&gt; Batch [1/5] preview: </span></a>
+<a class="sourceLine" id="cb3-14" data-line-number="14"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb3-15" data-line-number="15"><span class="co">#&gt; Observations: 32</span></a>
+<a class="sourceLine" id="cb3-16" data-line-number="16"><span class="co">#&gt; Variables: 5</span></a>
+<a class="sourceLine" id="cb3-17" data-line-number="17"><span class="co">#&gt; $ Sepal.Length &lt;dbl&gt; 4.4, 4.8, 5.1, 5.0, 5.4, 4.8, 5.2, 5.4, 5.7, 4.9, 5…</span></a>
+<a class="sourceLine" id="cb3-18" data-line-number="18"><span class="co">#&gt; $ Sepal.Width  &lt;dbl&gt; 2.9, 3.4, 3.5, 3.4, 3.9, 3.4, 3.4, 3.9, 4.4, 3.0, 3…</span></a>
+<a class="sourceLine" id="cb3-19" data-line-number="19"><span class="co">#&gt; $ Petal.Length &lt;dbl&gt; 1.4, 1.6, 1.4, 1.6, 1.7, 1.9, 1.4, 1.3, 1.5, 1.4, 1…</span></a>
+<a class="sourceLine" id="cb3-20" data-line-number="20"><span class="co">#&gt; $ Petal.Width  &lt;dbl&gt; 0.2, 0.2, 0.3, 0.4, 0.4, 0.2, 0.2, 0.4, 0.4, 0.2, 0…</span></a>
+<a class="sourceLine" id="cb3-21" data-line-number="21"><span class="co">#&gt; $ Species      &lt;fct&gt; setosa, setosa, setosa, setosa, setosa, setosa, set…</span></a></code></pre></div>
+<p>The pre-compiled generator is partially-compatible with <code>dplyr</code> and <code>recipes</code> API. For example, you can create the dummy variables and do some preprocessing using <code>recipes</code>, and add some feature engineering using <code>mutate</code>:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co"># create a recipes</span></a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">rec &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/recipes/topics/recipe">recipe</a></span>(Species <span class="op">~</span><span class="st"> </span>. <span class="op">-</span><span class="st"> </span>Species, iris) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/recipes/topics/step_mutate">step_mutate</a></span>(</a>
+<a class="sourceLine" id="cb4-4" data-line-number="4">    <span class="dt">Petal.Ratio =</span> Petal.Length <span class="op">/</span><span class="st"> </span>Petal.Width,</a>
+<a class="sourceLine" id="cb4-5" data-line-number="5">    <span class="dt">Sepal.Ratio =</span> Sepal.Length <span class="op">/</span><span class="st"> </span>Sepal.Width</a>
+<a class="sourceLine" id="cb4-6" data-line-number="6">  ) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/recipes/topics/step_sqrt">step_sqrt</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/recipes/topics/has_role">all_numeric</a></span>()) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4-8" data-line-number="8"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/recipes/topics/step_center">step_center</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/recipes/topics/has_role">all_numeric</a></span>()) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4-9" data-line-number="9"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/recipes/topics/step_scale">step_scale</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/recipes/topics/has_role">all_numeric</a></span>()) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4-10" data-line-number="10"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/recipes/topics/step_dummy">step_dummy</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/recipes/topics/has_role">all_nominal</a></span>(), <span class="dt">one_hot =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4-11" data-line-number="11"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/recipes/topics/prep">prep</a></span>()</a>
+<a class="sourceLine" id="cb4-12" data-line-number="12"></a>
+<a class="sourceLine" id="cb4-13" data-line-number="13"><span class="co"># store the recipes to generator</span></a>
+<a class="sourceLine" id="cb4-14" data-line-number="14">gen <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4-15" data-line-number="15"><span class="st">  </span><span class="kw"><a href="reference/inject_recipe.html">inject_recipe</a></span>(<span class="dt">rec =</span> rec)</a>
+<a class="sourceLine" id="cb4-16" data-line-number="16"><span class="co">#&gt; A keras generator with: </span></a>
+<a class="sourceLine" id="cb4-17" data-line-number="17"><span class="co">#&gt; - Number of arrays: 0 </span></a>
+<a class="sourceLine" id="cb4-18" data-line-number="18"><span class="co">#&gt; - Steps to see all data: 5 steps </span></a>
+<a class="sourceLine" id="cb4-19" data-line-number="19"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-20" data-line-number="20"><span class="co">#&gt; Batch [1/5] preview: </span></a>
+<a class="sourceLine" id="cb4-21" data-line-number="21"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-22" data-line-number="22"><span class="co">#&gt; Observations: 32</span></a>
+<a class="sourceLine" id="cb4-23" data-line-number="23"><span class="co">#&gt; Variables: 9</span></a>
+<a class="sourceLine" id="cb4-24" data-line-number="24"><span class="co">#&gt; $ Sepal.Length       &lt;dbl&gt; -1.8397604, -1.2927438, -0.8972995, -1.027789…</span></a>
+<a class="sourceLine" id="cb4-25" data-line-number="25"><span class="co">#&gt; $ Sepal.Width        &lt;dbl&gt; -0.33117476, 0.80236422, 1.01882581, 0.802364…</span></a>
+<a class="sourceLine" id="cb4-26" data-line-number="26"><span class="co">#&gt; $ Petal.Length       &lt;dbl&gt; -1.3846249, -1.2208140, -1.3846249, -1.220814…</span></a>
+<a class="sourceLine" id="cb4-27" data-line-number="27"><span class="co">#&gt; $ Petal.Width        &lt;dbl&gt; -1.4100911, -1.4100911, -1.1618318, -0.952539…</span></a>
+<a class="sourceLine" id="cb4-28" data-line-number="28"><span class="co">#&gt; $ Petal.Ratio        &lt;dbl&gt; 1.24599300, 1.60609421, 0.28893840, -0.026949…</span></a>
+<a class="sourceLine" id="cb4-29" data-line-number="29"><span class="co">#&gt; $ Sepal.Ratio        &lt;dbl&gt; -1.0935885, -1.3943296, -1.2636138, -1.225275…</span></a>
+<a class="sourceLine" id="cb4-30" data-line-number="30"><span class="co">#&gt; $ Species_setosa     &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …</span></a>
+<a class="sourceLine" id="cb4-31" data-line-number="31"><span class="co">#&gt; $ Species_versicolor &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …</span></a>
+<a class="sourceLine" id="cb4-32" data-line-number="32"><span class="co">#&gt; $ Species_virginica  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …</span></a></code></pre></div>
+<p>If you already done with data preprocessing parts, you can declare which variables you want to use as <code>x</code> and <code>y</code> using <code>select_x</code> and <code>select_y</code>:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">gen <span class="op">%&lt;&gt;%</span></a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/inject_recipe.html">inject_recipe</a></span>(<span class="dt">rec =</span> rec) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="reference/select_x_y.html">select_x</a></span>(<span class="op">-</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/reexports.html">starts_with</a></span>(<span class="st">"Species"</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="st">  </span><span class="kw"><a href="reference/select_x_y.html">select_y</a></span>(<span class="kw"><a href="https://dplyr.tidyverse.org/reference/reexports.html">starts_with</a></span>(<span class="st">"Species"</span>))</a></code></pre></div>
+<p><strong>Note</strong> that I used <code>%&lt;&gt;%</code> (assign pipe) from <code>magrittr</code> just for efficiency.</p>
+<p>Saving the generator after selecting the variables is very recommended, since it makes the following sample splitting process become easier:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="co"># sample index</span></a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Random">set.seed</a></span>(<span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3">intrain &lt;-<span class="st"> </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/sample.html">sample</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/nrow">nrow</a></span>(iris), <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/nrow">nrow</a></span>(iris) <span class="op">*</span><span class="st"> </span><span class="fl">0.7</span>)</a>
+<a class="sourceLine" id="cb6-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co"># split sample using dplyr's slice</span></a>
+<a class="sourceLine" id="cb6-6" data-line-number="6">train_gen &lt;-<span class="st"> </span>gen <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/slice.html">slice</a></span>(intrain) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="st">  </span><span class="kw"><a href="reference/build.html">build_generator</a></span>()</a>
+<a class="sourceLine" id="cb6-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb6-10" data-line-number="10">val_gen &lt;-<span class="st"> </span>gen <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb6-11" data-line-number="11"><span class="st">  </span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/slice.html">slice</a></span>(<span class="op">-</span>intrain) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb6-12" data-line-number="12"><span class="st">  </span><span class="kw"><a href="reference/build.html">build_generator</a></span>()</a></code></pre></div>
+<p>And now we are ready to test some functionalities in the model fitting process.</p>
+</div>
+<div id="model-fitting-using-generator" class="section level2">
+<h2 class="hasAnchor">
+<a href="#model-fitting-using-generator" class="anchor"></a>Model fitting using generator</h2>
+<p>In building Keras model, <code>kerasgenerator</code> provided some helpers function for defining some parameters related to the data. This is can be done from <code><a href="reference/get_meta.html">get_meta()</a></code> function. For example, you can use <code><a href="reference/get_meta.html">get_meta()</a></code> for getting the <code>input_shape</code> and <code>output_shape</code>:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">model &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/keras/topics/keras_model_sequential">keras_model_sequential</a></span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb7-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/keras/topics/layer_dense">layer_dense</a></span>(</a>
+<a class="sourceLine" id="cb7-4" data-line-number="4">    <span class="dt">name =</span> <span class="st">"dense1"</span>,</a>
+<a class="sourceLine" id="cb7-5" data-line-number="5">    <span class="dt">units =</span> <span class="dv">16</span>,</a>
+<a class="sourceLine" id="cb7-6" data-line-number="6">    <span class="dt">input_shape =</span> <span class="kw"><a href="reference/get_meta.html">get_meta</a></span>(train_gen, <span class="st">"input_shape"</span>)</a>
+<a class="sourceLine" id="cb7-7" data-line-number="7">  ) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb7-8" data-line-number="8"><span class="st">  </span></a>
+<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/keras/topics/layer_dense">layer_dense</a></span>(</a>
+<a class="sourceLine" id="cb7-10" data-line-number="10">    <span class="dt">name =</span> <span class="st">"dense2"</span>,</a>
+<a class="sourceLine" id="cb7-11" data-line-number="11">    <span class="dt">units =</span> <span class="dv">8</span></a>
+<a class="sourceLine" id="cb7-12" data-line-number="12">  ) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb7-13" data-line-number="13"><span class="st">  </span></a>
+<a class="sourceLine" id="cb7-14" data-line-number="14"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/keras/topics/layer_dense">layer_dense</a></span>(</a>
+<a class="sourceLine" id="cb7-15" data-line-number="15">    <span class="dt">name =</span> <span class="st">"dense_output"</span>,</a>
+<a class="sourceLine" id="cb7-16" data-line-number="16">    <span class="dt">units =</span> <span class="kw"><a href="reference/get_meta.html">get_meta</a></span>(train_gen, <span class="st">"output_shape"</span>),</a>
+<a class="sourceLine" id="cb7-17" data-line-number="17">    <span class="dt">activation =</span> <span class="st">"softmax"</span></a>
+<a class="sourceLine" id="cb7-18" data-line-number="18">  )</a>
+<a class="sourceLine" id="cb7-19" data-line-number="19"></a>
+<a class="sourceLine" id="cb7-20" data-line-number="20">model <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/keras/topics/reexports">compile</a></span>(</a>
+<a class="sourceLine" id="cb7-21" data-line-number="21">  <span class="dt">optimizer =</span> <span class="st">"adam"</span>,</a>
+<a class="sourceLine" id="cb7-22" data-line-number="22">  <span class="dt">metrics =</span> <span class="st">"accuracy"</span>,</a>
+<a class="sourceLine" id="cb7-23" data-line-number="23">  <span class="dt">loss =</span> <span class="st">"categorical_crossentropy"</span></a>
+<a class="sourceLine" id="cb7-24" data-line-number="24">)</a></code></pre></div>
+<p>In addition, <code>kerasgenerator</code> also masking the <code>*_generator()</code> function from <code>keras</code> in order to make those functions know the generator characteristic, like the number of <code>steps_per_epoch</code>/<code>steps</code>, and by default the <code>*_generator()</code> will use it as default parameters unless you want to override it manually.</p>
+<p>For example, when fitting using <code>kerasgenerator</code>, you just need to pass the generator(s) and it will automatically recognize the generator(s):</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">history &lt;-<span class="st"> </span>model <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/keras/topics/fit_generator">fit_generator</a></span>(</a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">  <span class="dt">generator =</span> train_gen,</a>
+<a class="sourceLine" id="cb8-3" data-line-number="3">  <span class="dt">validation_data =</span> val_gen,</a>
+<a class="sourceLine" id="cb8-4" data-line-number="4">  <span class="dt">epochs =</span> <span class="dv">30</span></a>
+<a class="sourceLine" id="cb8-5" data-line-number="5">)</a>
+<a class="sourceLine" id="cb8-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb8-7" data-line-number="7"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(history)</a></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-8-1.png" width="100%" style="display: block; margin: auto;"></p>
+<p>Note that <code>predict_generator</code> also provided <code>label</code> option to specify whether the prediction output should be tidied. The default value for this option is set to <code>TRUE</code>:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">model <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/keras/topics/evaluate_generator">evaluate_generator</a></span>(val_gen)</a>
+<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="co">#&gt; $loss</span></a>
+<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="co">#&gt; [1] 0.4536896</span></a>
+<a class="sourceLine" id="cb9-4" data-line-number="4"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb9-5" data-line-number="5"><span class="co">#&gt; $acc</span></a>
+<a class="sourceLine" id="cb9-6" data-line-number="6"><span class="co">#&gt; [1] 0.8222222</span></a>
+<a class="sourceLine" id="cb9-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb9-8" data-line-number="8">model <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/keras/topics/predict_generator">predict_generator</a></span>(val_gen)</a>
+<a class="sourceLine" id="cb9-9" data-line-number="9"><span class="co">#&gt; # A tibble: 45 x 4</span></a>
+<a class="sourceLine" id="cb9-10" data-line-number="10"><span class="co">#&gt;    setosa versicolor virginica label </span></a>
+<a class="sourceLine" id="cb9-11" data-line-number="11"><span class="co">#&gt;     &lt;dbl&gt;      &lt;dbl&gt;     &lt;dbl&gt; &lt;fct&gt; </span></a>
+<a class="sourceLine" id="cb9-12" data-line-number="12"><span class="co">#&gt;  1 0.776      0.168     0.0554 setosa</span></a>
+<a class="sourceLine" id="cb9-13" data-line-number="13"><span class="co">#&gt;  2 0.858      0.117     0.0250 setosa</span></a>
+<a class="sourceLine" id="cb9-14" data-line-number="14"><span class="co">#&gt;  3 0.0190     0.496     0.485  setosa</span></a>
+<a class="sourceLine" id="cb9-15" data-line-number="15"><span class="co">#&gt;  4 0.0619     0.624     0.314  setosa</span></a>
+<a class="sourceLine" id="cb9-16" data-line-number="16"><span class="co">#&gt;  5 0.935      0.0291    0.0356 setosa</span></a>
+<a class="sourceLine" id="cb9-17" data-line-number="17"><span class="co">#&gt;  6 0.305      0.333     0.363  setosa</span></a>
+<a class="sourceLine" id="cb9-18" data-line-number="18"><span class="co">#&gt;  7 0.0364     0.384     0.580  setosa</span></a>
+<a class="sourceLine" id="cb9-19" data-line-number="19"><span class="co">#&gt;  8 0.0477     0.716     0.236  setosa</span></a>
+<a class="sourceLine" id="cb9-20" data-line-number="20"><span class="co">#&gt;  9 0.0771     0.323     0.600  setosa</span></a>
+<a class="sourceLine" id="cb9-21" data-line-number="21"><span class="co">#&gt; 10 0.954      0.0317    0.0144 setosa</span></a>
+<a class="sourceLine" id="cb9-22" data-line-number="22"><span class="co">#&gt; # … with 35 more rows</span></a></code></pre></div>
 </div>
 <div id="further-development" class="section level2">
 <h2 class="hasAnchor">
@@ -123,8 +258,6 @@
     <div class="links">
 <h2>Links</h2>
 <ul class="list-unstyled">
-<li>Browse source code at <br><a href="https://github.com/bagasbgy/kerasgenerator">https://​github.com/​bagasbgy/​kerasgenerator</a>
-</li>
 <li>Report a bug at <br><a href="https://github.com/bagasbgy/kerasgenerator/issues">https://​github.com/​bagasbgy/​kerasgenerator/​issues</a>
 </li>
 </ul>
@@ -146,7 +279,7 @@
 <h2>Developers</h2>
 <ul class="list-unstyled">
 <li>
-<a href="https://bagasbgy.netlify.com">R. Dimas Bagas Herlambang</a> <br><small class="roles"> Author, maintainer, copyright holder </small>  </li>
+<a href="https://bagasbgy.com">R. Dimas Bagas Herlambang</a> <br><small class="roles"> Author, maintainer </small>  </li>
 </ul>
 </div>
 
@@ -156,7 +289,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by <a href="https://bagasbgy.netlify.com">R. Dimas Bagas Herlambang</a>.</p>
+  <p>Developed by <a href="https://bagasbgy.com">R. Dimas Bagas Herlambang</a>.</p>
 </div>
 
 <div class="pkgdown">

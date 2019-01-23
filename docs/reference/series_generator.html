@@ -75,7 +75,7 @@ a supervised time series Keras model" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">kerasgenerator</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -90,30 +90,13 @@ a supervised time series Keras model" />
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/timeseries.html">Data Generator for Time Series Models</a>
-    </li>
-  </ul>
-</li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
-        <li>
-  <a href="https://github.com/bagasbgy/kerasgenerator">
-    <span class="fa fa-github fa-lg"></span>
-     
-  </a>
-</li>
+        
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -127,7 +110,7 @@ a supervised time series Keras model" />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Data generator for training or testing a time series Keras model</h1>
-    <small class="dont-index">Source: <a href='https://github.com/bagasbgy/kerasgenerator/blob/master/R/timeseries_generator.R'><code>R/timeseries_generator.R</code></a></small>
+    
     <div class="hidden name"><code>series_generator.Rd</code></div>
     </div>
 
@@ -138,9 +121,8 @@ a supervised time series Keras model</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>series_generator</span>(<span class='no'>data</span>, <span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>lookback</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>timesteps</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>start_index</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>end_index</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>batch_size</span> <span class='kw'>=</span> <span class='fl'>32</span>,
-  <span class='kw'>return_target</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>prep_funs</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>series_generator</span>(<span class='no'>data</span>, <span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>lookback</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>timesteps</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='no'>start_index</span>,
+  <span class='no'>end_index</span>, <span class='kw'>batch_size</span> <span class='kw'>=</span> <span class='fl'>32</span>, <span class='kw'>return_target</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>prep_funs</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -228,7 +210,7 @@ a batch of <code>x_array</code></p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='https://bagasbgy.netlify.com'>R. Dimas Bagas Herlambang</a>.</p>
+  <p>Developed by <a href='https://bagasbgy.com'>R. Dimas Bagas Herlambang</a>.</p>
 </div>
 
 <div class="pkgdown">
