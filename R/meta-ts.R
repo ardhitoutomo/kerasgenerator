@@ -13,7 +13,7 @@ set_meta.kg_ts <- function(x) {
   
   x$partition <- 1
   
-  y_start <- x$timesteps + x$lookback + 1
+  y_start <- x$timesteps + x$lookback
   
   x$i <- seq(y_start, by = x$batch_size, length.out = x$steps_to_all)
   
@@ -33,7 +33,7 @@ set_meta.kg_ts <- function(x) {
   
   x$x_rows <- x$y_rows - x$lookback
   
-  x$rows <- c(min(x$x_rows):max(x$y_rows))
+  x$rows <- c((min(x$x_rows) - x$timesteps + 1):max(x$y_rows))
   
   # set batch preview
   set_series_preview(x, x$data)
