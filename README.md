@@ -25,3 +25,5 @@ devtools::install_github("bagasbgy/kerasgenerator")
 
   - Support for generating data from **file(s) in specified path**
   - Data generator for **k-shot learning** model fitting
+
+# ini Ar ikuti IT git
